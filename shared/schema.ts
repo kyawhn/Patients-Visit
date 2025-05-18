@@ -28,6 +28,8 @@ export const patients = pgTable("patients", {
   lastVisit: timestamp("last_visit"),
 });
 
+// We'll use PostgreSQL foreign keys for relationships instead of relations API
+
 export const insertPatientSchema = createInsertSchema(patients).omit({
   id: true,
   lastVisit: true,
@@ -39,7 +41,7 @@ export type Patient = typeof patients.$inferSelect;
 // Appointments Schema
 export const appointments = pgTable("appointments", {
   id: serial("id").primaryKey(),
-  patientId: integer("patient_id").notNull(),
+  patientId: integer("patient_id").notNull().references(() => patients.id),
   date: timestamp("date").notNull(),
   duration: integer("duration").notNull(), // in minutes
   treatmentType: text("treatment_type").notNull(),
@@ -57,7 +59,7 @@ export type Appointment = typeof appointments.$inferSelect;
 // Treatment Records Schema
 export const treatmentRecords = pgTable("treatment_records", {
   id: serial("id").primaryKey(),
-  patientId: integer("patient_id").notNull(),
+  patientId: integer("patient_id").notNull().references(() => patients.id),
   date: timestamp("date").notNull(),
   treatmentType: text("treatment_type").notNull(),
   notes: text("notes"),
