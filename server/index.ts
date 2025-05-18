@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { checkTables } from "./db-setup";
 import { setupGoogleDriveAPI } from "./googleDrive";
+import { initializeDefaultSettings } from "./initSettings";
 
 const app = express();
 app.use(express.json());
@@ -46,6 +47,9 @@ app.use((req, res, next) => {
   try {
     await checkTables();
     console.log('Database setup complete');
+    
+    // Initialize default clinic settings
+    await initializeDefaultSettings();
   } catch (error) {
     console.error('Database setup failed:', error);
   }
