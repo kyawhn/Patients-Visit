@@ -39,6 +39,17 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Initialize Google Drive API
+  setupGoogleDriveAPI();
+  
+  // Initialize database tables
+  try {
+    await checkTables();
+    console.log('Database setup complete');
+  } catch (error) {
+    console.error('Database setup failed:', error);
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

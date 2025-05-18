@@ -1,6 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+// Use database storage instead of memory storage
+import { dbStorage as storage } from "./dbStorage";
 import { 
   insertPatientSchema, 
   insertAppointmentSchema, 
